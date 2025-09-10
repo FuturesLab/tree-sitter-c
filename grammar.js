@@ -66,6 +66,7 @@ module.exports = grammar({
     [$.enum_specifier],
     [$._type_specifier, $._old_style_parameter_list],
     [$.parameter_list, $._old_style_parameter_list],
+    [$.preproc_function_parameters]
   ],
 
   word: $ => $.identifier,
@@ -635,7 +636,7 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
       alias($.preproc_if_in_field_declaration_list, $.preproc_if),
-      alias($.preproc_ifdef_in_field_declaration_list, $.preproc_ifdef),
+      alias($.preproc_ifdef_in_field_declaration_list, $.preproc_ifdef)
     ),
 
     field_declaration: $ => seq(
@@ -660,11 +661,50 @@ module.exports = grammar({
       '...',
     ),
 
+    // parameter_list: $ => seq(
+    //   '(',
+    //   commaSep(choice($.parameter_declaration, $.variadic_parameter)),
+    //   ')',
+    // ),
     parameter_list: $ => seq(
       '(',
-      commaSep(choice($.parameter_declaration, $.variadic_parameter)),
-      ')',
+      commaOrEndifSep(
+        choice(
+          $.parameter_declaration,
+          $.variadic_parameter,
+          $.preproc_function_parameters
+        )
+      ),
+      ')'
     ),
+
+    preproc_function_parameters: $ => seq(
+      choice(
+        seq('#if', field('condition', $._preproc_expression)),
+        seq('#ifdef', field('name', $.identifier)),
+        seq('#ifndef', field('name', $.identifier))
+      ),
+      commaOrEndifSep(choice(
+        $.parameter_declaration,
+        $.variadic_parameter,
+        $.preproc_function_parameters
+      )),
+   
+      optional(repeat(
+        seq(
+          choice(
+            seq('#elif', field('condition', $._preproc_expression)),
+            seq('#else')
+          ),
+          commaOrEndifSep(choice(
+            $.parameter_declaration,
+            $.variadic_parameter,
+            $.preproc_function_parameters
+          ))
+        )
+      )),
+    ),
+
     _old_style_parameter_list: $ => seq(
       '(',
       commaSep(choice($.identifier, $.variadic_parameter)),
@@ -1333,4 +1373,24 @@ function commaSep(rule) {
  */
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+function commaOrEndifSep1(rule) {
+  return seq(
+    rule,
+    repeat(
+      seq(
+        choice(
+          ',',          // normal comma
+          seq('#endif', ','),  // #endif followed by comma
+          seq(',', '#endif')   // comma followed by #endif
+        ),
+        rule
+      )
+    )
+  );
+}
+
+function commaOrEndifSep(rule) {
+  return optional(commaOrEndifSep1(rule));
 }

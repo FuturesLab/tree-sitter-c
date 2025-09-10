@@ -4321,6 +4321,10 @@
                     {
                       "type": "SYMBOL",
                       "name": "variadic_parameter"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "preproc_function_parameters"
                     }
                   ]
                 },
@@ -4330,8 +4334,39 @@
                     "type": "SEQ",
                     "members": [
                       {
-                        "type": "STRING",
-                        "value": ","
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": ","
+                          },
+                          {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": "#endif"
+                              },
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              }
+                            ]
+                          },
+                          {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              },
+                              {
+                                "type": "STRING",
+                                "value": "#endif"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
                         "type": "CHOICE",
@@ -4343,6 +4378,10 @@
                           {
                             "type": "SYMBOL",
                             "name": "variadic_parameter"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "preproc_function_parameters"
                           }
                         ]
                       }
@@ -4359,6 +4398,294 @@
         {
           "type": "STRING",
           "value": ")"
+        }
+      ]
+    },
+    "preproc_function_parameters": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "#if"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "condition",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_preproc_expression"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "#ifdef"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "name",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "#ifndef"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "name",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "parameter_declaration"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "variadic_parameter"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "preproc_function_parameters"
+                    }
+                  ]
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": ","
+                          },
+                          {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": "#endif"
+                              },
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              }
+                            ]
+                          },
+                          {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ","
+                              },
+                              {
+                                "type": "STRING",
+                                "value": "#endif"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "parameter_declaration"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "variadic_parameter"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "preproc_function_parameters"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "#elif"
+                          },
+                          {
+                            "type": "FIELD",
+                            "name": "condition",
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "_preproc_expression"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "#else"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "SYMBOL",
+                                "name": "parameter_declaration"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "variadic_parameter"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "preproc_function_parameters"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "REPEAT",
+                            "content": {
+                              "type": "SEQ",
+                              "members": [
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "STRING",
+                                      "value": ","
+                                    },
+                                    {
+                                      "type": "SEQ",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": "#endif"
+                                        },
+                                        {
+                                          "type": "STRING",
+                                          "value": ","
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "SEQ",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": ","
+                                        },
+                                        {
+                                          "type": "STRING",
+                                          "value": "#endif"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "parameter_declaration"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "variadic_parameter"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "preproc_function_parameters"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -8110,6 +8437,9 @@
     [
       "parameter_list",
       "_old_style_parameter_list"
+    ],
+    [
+      "preproc_function_parameters"
     ]
   ],
   "precedences": [],

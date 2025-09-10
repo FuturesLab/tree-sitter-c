@@ -2397,6 +2397,10 @@
           "named": true
         },
         {
+          "type": "preproc_function_parameters",
+          "named": true
+        },
+        {
           "type": "variadic_parameter",
           "named": true
         }
@@ -2885,6 +2889,78 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "preproc_function_parameters",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "preproc_defined",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "parameter_declaration",
+          "named": true
+        },
+        {
+          "type": "preproc_function_parameters",
+          "named": true
+        },
+        {
+          "type": "variadic_parameter",
+          "named": true
+        }
+      ]
     }
   },
   {
