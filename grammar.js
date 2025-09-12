@@ -32,6 +32,7 @@ const PREC = {
   CALL: 15,
   FIELD: 16,
   SUBSCRIPT: 17,
+  PREPROC_ITEM: 18,
 };
 
 module.exports = grammar({
@@ -66,7 +67,10 @@ module.exports = grammar({
     [$.enum_specifier],
     [$._type_specifier, $._old_style_parameter_list],
     [$.parameter_list, $._old_style_parameter_list],
-    [$.preproc_function_parameters]
+    [$.preproc_function_parameters],
+    [$.preproc_item, $.fragmentary_item],
+    [$.preproc_ifdef, $.preproc_ifdef_with_function_return_type],
+    [$.preproc_if, $.preproc_if_with_function_return_type],
   ],
 
   word: $ => $.identifier,
@@ -147,8 +151,10 @@ module.exports = grammar({
       token.immediate(/\r?\n/),
     ),
 
-    ...preprocIf('', $ => $._block_item),
+    ...preprocIf('', $ => $.preproc_item),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
+    ...preprocIf('_with_function_return_type', $ => $.primitive_type),
+
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
@@ -224,12 +230,27 @@ module.exports = grammar({
     },
 
     // Main Grammar
+    preproc_item: $ =>
+      choice(
+        $._block_item,
+        $.fragmentary_item
+      ),
+
+    fragmentary_item: $ => prec.right(-10, choice(
+      $.primitive_type,
+      $.struct_specifier,
+      $.union_specifier,
+      $.enum_specifier,
+      $.sized_type_specifier
+    )),
 
     function_definition: $ => seq(
       optional($.ms_call_modifier),
-      $._declaration_specifiers,
+      choice(
+        $._declaration_specifiers,
+      ),
       field('declarator', $._declarator),
-      field('body', $.compound_statement),
+      field('body', $.compound_statement)
     ),
 
     _old_style_function_definition: $ => seq(
@@ -660,12 +681,6 @@ module.exports = grammar({
     variadic_parameter: _ => seq(
       '...',
     ),
-
-    // parameter_list: $ => seq(
-    //   '(',
-    //   commaSep(choice($.parameter_declaration, $.variadic_parameter)),
-    //   ')',
-    // ),
     parameter_list: $ => seq(
       '(',
       commaOrEndifSep(
@@ -689,7 +704,7 @@ module.exports = grammar({
         $.variadic_parameter,
         $.preproc_function_parameters
       )),
-   
+
       optional(repeat(
         seq(
           choice(
