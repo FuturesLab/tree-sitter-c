@@ -69,8 +69,7 @@ module.exports = grammar({
     [$.parameter_list, $._old_style_parameter_list],
     [$.preproc_function_parameters],
     [$.preproc_item, $.fragmentary_item],
-    [$.preproc_ifdef, $.preproc_ifdef_with_function_return_type],
-    [$.preproc_if, $.preproc_if_with_function_return_type],
+    [$._declaration_specifiers, $._function_declaration_specifiers],
   ],
 
   word: $ => $.identifier,
@@ -153,7 +152,7 @@ module.exports = grammar({
 
     ...preprocIf('', $ => $.preproc_item),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
-    ...preprocIf('_with_function_return_type', $ => $.primitive_type),
+    // ...preprocIf('_with_function_return_type', $ => $._type_identifier),
 
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
@@ -246,9 +245,7 @@ module.exports = grammar({
 
     function_definition: $ => seq(
       optional($.ms_call_modifier),
-      choice(
-        $._declaration_specifiers,
-      ),
+      $._declaration_specifiers,
       field('declarator', $._declarator),
       field('body', $.compound_statement)
     ),
@@ -295,6 +292,33 @@ module.exports = grammar({
       field('type', $._type_specifier),
       repeat($._declaration_modifiers),
     )),
+
+    _function_declaration_specifiers: $ => prec.right(seq(
+      repeat($._declaration_modifiers),
+      choice(
+        field('type', $._type_specifier),
+        field('ifdef_type', $.preproc_function_return_type)
+      ),
+      repeat($._declaration_modifiers),
+    )),
+
+
+    preproc_function_return_type: $ => prec.right(1,
+      seq(
+        alias($.preproc_ifdef_type, $.preproc_ifdef)
+      )
+    ),
+
+    preproc_ifdef_type: $ => seq(
+      choice(
+        seq('#if', field('condition', $._preproc_expression)),
+        seq('#ifdef', field('name', $.identifier)),
+        seq('#ifndef', field('name', $.identifier))
+      ),
+      $._declaration_specifiers,
+      repeat(seq('#else', $._declaration_specifiers)),
+    ),
+
 
     linkage_specification: $ => seq(
       'extern',
