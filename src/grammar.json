@@ -1903,23 +1903,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "primitive_type"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "struct_specifier"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "union_specifier"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "enum_specifier"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "sized_type_specifier"
+            "name": "_declaration_specifiers"
           }
         ]
       }
@@ -8633,6 +8617,10 @@
     [
       "_declaration_specifiers",
       "_function_declaration_specifiers"
+    ],
+    [
+      "_type_specifier",
+      "concatenated_string"
     ]
   ],
   "precedences": [],

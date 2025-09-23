@@ -1656,29 +1656,40 @@
   {
     "type": "fragmentary_item",
     "named": true,
-    "fields": {},
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_type_specifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
         {
-          "type": "enum_specifier",
+          "type": "attribute_declaration",
           "named": true
         },
         {
-          "type": "primitive_type",
+          "type": "attribute_specifier",
           "named": true
         },
         {
-          "type": "sized_type_specifier",
+          "type": "ms_declspec_modifier",
           "named": true
         },
         {
-          "type": "struct_specifier",
+          "type": "storage_class_specifier",
           "named": true
         },
         {
-          "type": "union_specifier",
+          "type": "type_qualifier",
           "named": true
         }
       ]

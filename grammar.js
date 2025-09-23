@@ -70,6 +70,7 @@ module.exports = grammar({
     [$.preproc_function_parameters],
     [$.preproc_item, $.fragmentary_item],
     [$._declaration_specifiers, $._function_declaration_specifiers],
+    [$._type_specifier, $.concatenated_string],
   ],
 
   word: $ => $.identifier,
@@ -152,8 +153,6 @@ module.exports = grammar({
 
     ...preprocIf('', $ => $.preproc_item),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
-    // ...preprocIf('_with_function_return_type', $ => $._type_identifier),
-
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
@@ -236,11 +235,7 @@ module.exports = grammar({
       ),
 
     fragmentary_item: $ => prec.right(-10, choice(
-      $.primitive_type,
-      $.struct_specifier,
-      $.union_specifier,
-      $.enum_specifier,
-      $.sized_type_specifier
+      $._declaration_specifiers,
     )),
 
     function_definition: $ => seq(
