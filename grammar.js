@@ -68,9 +68,10 @@ module.exports = grammar({
     [$._type_specifier, $._old_style_parameter_list],
     [$.parameter_list, $._old_style_parameter_list],
     [$.preproc_function_parameters],
-    [$.preproc_item, $.fragmentary_item],
+    [$._preproc_item, $.fragmentary_item],
     [$._declaration_specifiers, $._function_declaration_specifiers],
     [$._type_specifier, $.concatenated_string],
+    [$.storage_class_specifier, $.linkage_specification],
   ],
 
   word: $ => $.identifier,
@@ -151,7 +152,7 @@ module.exports = grammar({
       token.immediate(/\r?\n/),
     ),
 
-    ...preprocIf('', $ => $.preproc_item),
+    ...preprocIf('', $ => $._preproc_item),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
@@ -228,14 +229,15 @@ module.exports = grammar({
     },
 
     // Main Grammar
-    preproc_item: $ =>
-      choice(
-        $._block_item,
-        $.fragmentary_item
-      ),
+    _preproc_item: $ => choice(
+      $._block_item,
+      $.fragmentary_item,
+    ),
 
-    fragmentary_item: $ => prec.right(-10, choice(
+    fragmentary_item: $ => prec(-10, choice(
       $._declaration_specifiers,
+      $.else_clause,
+      $.storage_class_specifier,
     )),
 
     function_definition: $ => seq(

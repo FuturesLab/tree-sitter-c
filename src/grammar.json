@@ -421,7 +421,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "preproc_item"
+            "name": "_preproc_item"
           }
         },
         {
@@ -498,7 +498,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "preproc_item"
+            "name": "_preproc_item"
           }
         },
         {
@@ -562,7 +562,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "preproc_item"
+            "name": "_preproc_item"
           }
         }
       ]
@@ -595,7 +595,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "preproc_item"
+            "name": "_preproc_item"
           }
         },
         {
@@ -663,7 +663,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "preproc_item"
+            "name": "_preproc_item"
           }
         },
         {
@@ -1882,7 +1882,7 @@
         }
       ]
     },
-    "preproc_item": {
+    "_preproc_item": {
       "type": "CHOICE",
       "members": [
         {
@@ -1896,7 +1896,7 @@
       ]
     },
     "fragmentary_item": {
-      "type": "PREC_RIGHT",
+      "type": "PREC",
       "value": -10,
       "content": {
         "type": "CHOICE",
@@ -1904,6 +1904,14 @@
           {
             "type": "SYMBOL",
             "name": "_declaration_specifiers"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "else_clause"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "storage_class_specifier"
           }
         ]
       }
@@ -8611,7 +8619,7 @@
       "preproc_function_parameters"
     ],
     [
-      "preproc_item",
+      "_preproc_item",
       "fragmentary_item"
     ],
     [
@@ -8621,6 +8629,10 @@
     [
       "_type_specifier",
       "concatenated_string"
+    ],
+    [
+      "storage_class_specifier",
+      "linkage_specification"
     ]
   ],
   "precedences": [],
