@@ -69,9 +69,12 @@ module.exports = grammar({
     [$.parameter_list, $._old_style_parameter_list],
     [$.preproc_function_parameters],
     [$._preproc_item, $.fragmentary_item],
-    [$._declaration_specifiers, $._function_declaration_specifiers],
     [$._type_specifier, $.concatenated_string],
     [$.storage_class_specifier, $.linkage_specification],
+    [$.preproc_else_as_function_return_type, $._declaration_specifiers],
+    [$.preproc_ifdef_as_function_return_type, $._declaration_specifiers],
+    [$.preproc_if_as_function_return_type, $._declaration_specifiers],
+
   ],
 
   word: $ => $.identifier,
@@ -82,6 +85,7 @@ module.exports = grammar({
     // Top level items are block items with the exception of the expression statement
     _top_level_item: $ => choice(
       $.function_definition,
+      alias($.function_definition_preproc_return, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -99,6 +103,7 @@ module.exports = grammar({
 
     _block_item: $ => choice(
       $.function_definition,
+      alias($.function_definition_preproc_return, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -113,8 +118,6 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
     ),
-
-    // Preprocesser
 
     preproc_include: $ => seq(
       preprocessor('include'),
@@ -153,7 +156,8 @@ module.exports = grammar({
     ),
 
     ...preprocIf('', $ => $._preproc_item),
-    ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
+    ...preprocIf('_as_function_return_type', $ => $._type_specifier, 1),
+    ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item, 1),
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
@@ -247,6 +251,16 @@ module.exports = grammar({
       field('body', $.compound_statement)
     ),
 
+    function_definition_preproc_return: $ => prec.dynamic(10, seq(
+      optional($.ms_call_modifier),
+      field('return_type', choice(
+        alias($.preproc_if_as_function_return_type, $.preproc_if),
+        alias($.preproc_ifdef_as_function_return_type, $.preproc_ifdef)
+      )),
+      field('declarator', $._declarator),
+      field('body', $.compound_statement)
+    )),
+
     _old_style_function_definition: $ => seq(
       optional($.ms_call_modifier),
       $._declaration_specifiers,
@@ -289,33 +303,6 @@ module.exports = grammar({
       field('type', $._type_specifier),
       repeat($._declaration_modifiers),
     )),
-
-    _function_declaration_specifiers: $ => prec.right(seq(
-      repeat($._declaration_modifiers),
-      choice(
-        field('type', $._type_specifier),
-        field('ifdef_type', $.preproc_function_return_type)
-      ),
-      repeat($._declaration_modifiers),
-    )),
-
-
-    preproc_function_return_type: $ => prec.right(1,
-      seq(
-        alias($.preproc_ifdef_type, $.preproc_ifdef)
-      )
-    ),
-
-    preproc_ifdef_type: $ => seq(
-      choice(
-        seq('#if', field('condition', $._preproc_expression)),
-        seq('#ifdef', field('name', $.identifier)),
-        seq('#ifndef', field('name', $.identifier))
-      ),
-      $._declaration_specifiers,
-      repeat(seq('#else', $._declaration_specifiers)),
-    ),
-
 
     linkage_specification: $ => seq(
       'extern',
@@ -1321,14 +1308,14 @@ module.exports.PREC = PREC;
  *
  * @return {RuleBuilders<string, string>}
  */
-function preprocIf(suffix, content) {
-  /**
-    *
-    * @param {GrammarSymbols<string>} $
-    *
-    * @return {ChoiceRule}
-    *
-    */
+
+function preprocIf(suffix, content, precedence = 0) {
+
+
+  function wrap($) {
+    return precedence ? prec(precedence, $) : $;
+  }
+
   function elseBlock($) {
     return choice(
       suffix ? alias($['preproc_else' + suffix], $.preproc_else) : $.preproc_else,
@@ -1337,44 +1324,45 @@ function preprocIf(suffix, content) {
   }
 
   return {
-    ['preproc_if' + suffix]: $ => seq(
+    ['preproc_if' + suffix]: $ => wrap(seq(
       preprocessor('if'),
       field('condition', $._preproc_expression),
       '\n',
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
       preprocessor('endif'),
-    ),
+    )),
 
-    ['preproc_ifdef' + suffix]: $ => seq(
+    ['preproc_ifdef' + suffix]: $ => wrap(seq(
       choice(preprocessor('ifdef'), preprocessor('ifndef')),
       field('name', $.identifier),
       repeat(content($)),
       field('alternative', optional(choice(elseBlock($), $.preproc_elifdef))),
       preprocessor('endif'),
-    ),
+    )),
 
-    ['preproc_else' + suffix]: $ => seq(
+    ['preproc_else' + suffix]: $ => wrap(seq(
       preprocessor('else'),
       repeat(content($)),
-    ),
+    )),
 
-    ['preproc_elif' + suffix]: $ => seq(
+    ['preproc_elif' + suffix]: $ => wrap(seq(
       preprocessor('elif'),
       field('condition', $._preproc_expression),
       '\n',
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
-    ),
+    )),
 
-    ['preproc_elifdef' + suffix]: $ => seq(
+    ['preproc_elifdef' + suffix]: $ => wrap(seq(
       choice(preprocessor('elifdef'), preprocessor('elifndef')),
       field('name', $.identifier),
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
-    ),
+    )),
   };
 }
+
 
 /**
   * Creates a preprocessor regex rule
