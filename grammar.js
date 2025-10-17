@@ -71,9 +71,18 @@ module.exports = grammar({
     [$._preproc_item, $.fragmentary_item],
     [$._type_specifier, $.concatenated_string],
     [$.storage_class_specifier, $.linkage_specification],
-    [$.preproc_else_as_function_return_type, $._declaration_specifiers],
-    [$.preproc_ifdef_as_function_return_type, $._declaration_specifiers],
-    [$.preproc_if_as_function_return_type, $._declaration_specifiers],
+
+    // holy s
+    [$.translation_unit, $.function_definition_preproc],
+    [$.compound_statement, $.function_definition_preproc],
+    [$._preproc_item, $.function_definition_preproc],
+    [$._preproc_item, $.preproc_ifdef_as_function_return_type],
+    [$._preproc_item, $.preproc_if_as_function_return_type],
+    [$._preproc_item, $.preproc_else_as_function_return_type],
+    [$.preproc_ifdef_as_function_return_type, $.preproc_ifdef],
+    [$.preproc_if_as_function_return_type, $.preproc_if],
+    [$.preproc_else_as_function_return_type, $.preproc_else],
+    [$.preproc_elif_as_function_return_type, $.preproc_elif],
 
   ],
 
@@ -85,7 +94,7 @@ module.exports = grammar({
     // Top level items are block items with the exception of the expression statement
     _top_level_item: $ => choice(
       $.function_definition,
-      alias($.function_definition_preproc_return, $.function_definition),
+      alias($.function_definition_preproc, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -103,7 +112,7 @@ module.exports = grammar({
 
     _block_item: $ => choice(
       $.function_definition,
-      alias($.function_definition_preproc_return, $.function_definition),
+      alias($.function_definition_preproc, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -156,8 +165,8 @@ module.exports = grammar({
     ),
 
     ...preprocIf('', $ => $._preproc_item),
-    ...preprocIf('_as_function_return_type', $ => $._type_specifier, 1),
-    ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item, 1),
+    ...preprocIf('_as_function_return_type', $ => $.fragmentary_item),
+    ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
@@ -240,6 +249,7 @@ module.exports = grammar({
 
     fragmentary_item: $ => prec(-10, choice(
       $._declaration_specifiers,
+      $.ms_call_modifier,
       $.else_clause,
       $.storage_class_specifier,
     )),
@@ -251,15 +261,17 @@ module.exports = grammar({
       field('body', $.compound_statement)
     ),
 
-    function_definition_preproc_return: $ => prec.dynamic(10, seq(
-      optional($.ms_call_modifier),
-      field('return_type', choice(
-        alias($.preproc_if_as_function_return_type, $.preproc_if),
-        alias($.preproc_ifdef_as_function_return_type, $.preproc_ifdef)
-      )),
+
+    function_definition_preproc: $ => seq(
+      choice(
+        $.preproc_if_as_function_return_type,
+        $.preproc_ifdef_as_function_return_type
+      ),
+      optional($._declaration_specifiers),
       field('declarator', $._declarator),
       field('body', $.compound_statement)
-    )),
+    ),
+
 
     _old_style_function_definition: $ => seq(
       optional($.ms_call_modifier),
