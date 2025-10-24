@@ -72,7 +72,6 @@ module.exports = grammar({
     [$._type_specifier, $.concatenated_string],
     [$.storage_class_specifier, $.linkage_specification],
 
-    // holy s
     [$.translation_unit, $.function_definition_preproc],
     [$.compound_statement, $.function_definition_preproc],
     [$._preproc_item, $.function_definition_preproc],
@@ -108,6 +107,7 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
+      $.preproc_if_assignment
     ),
 
     _block_item: $ => choice(
@@ -126,6 +126,7 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
+      $.preproc_if_assignment
     ),
 
     preproc_include: $ => seq(
@@ -241,13 +242,20 @@ module.exports = grammar({
       }));
     },
 
+    preproc_if_assignment: $ => seq(
+      choice($.preproc_if, $.preproc_ifdef),
+      "=",
+      $._statement
+    ),
+
     // Main Grammar
     _preproc_item: $ => choice(
       $._block_item,
       $.fragmentary_item,
     ),
 
-    fragmentary_item: $ => prec(-10, choice(
+    fragmentary_item: $ => prec.left(-10, choice(
+      seq($._declaration_specifiers, $.identifier),
       $._declaration_specifiers,
       $.ms_call_modifier,
       $.else_clause,
@@ -264,8 +272,8 @@ module.exports = grammar({
 
     function_definition_preproc: $ => seq(
       choice(
-        $.preproc_if_as_function_return_type,
-        $.preproc_ifdef_as_function_return_type
+        alias($.preproc_if_as_function_return_type, $.preproc_if),
+        alias($.preproc_ifdef_as_function_return_type, $.preproc_ifdef)
       ),
       optional($._declaration_specifiers),
       field('declarator', $._declarator),

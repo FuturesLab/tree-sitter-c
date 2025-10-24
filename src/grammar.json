@@ -81,6 +81,10 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_if_assignment"
         }
       ]
     },
@@ -156,6 +160,10 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_if_assignment"
         }
       ]
     },
@@ -2240,6 +2248,32 @@
         }
       ]
     },
+    "preproc_if_assignment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "preproc_if"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "preproc_ifdef"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_statement"
+        }
+      ]
+    },
     "_preproc_item": {
       "type": "CHOICE",
       "members": [
@@ -2254,11 +2288,24 @@
       ]
     },
     "fragmentary_item": {
-      "type": "PREC",
+      "type": "PREC_LEFT",
       "value": -10,
       "content": {
         "type": "CHOICE",
         "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_declaration_specifiers"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          },
           {
             "type": "SYMBOL",
             "name": "_declaration_specifiers"
@@ -2322,12 +2369,22 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "preproc_if_as_function_return_type"
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "preproc_if_as_function_return_type"
+              },
+              "named": true,
+              "value": "preproc_if"
             },
             {
-              "type": "SYMBOL",
-              "name": "preproc_ifdef_as_function_return_type"
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "preproc_ifdef_as_function_return_type"
+              },
+              "named": true,
+              "value": "preproc_ifdef"
             }
           ]
         },
