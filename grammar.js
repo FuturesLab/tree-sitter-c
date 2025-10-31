@@ -83,6 +83,12 @@ module.exports = grammar({
     [$.preproc_else_as_function_return_type, $.preproc_else],
     [$.preproc_elif_as_function_return_type, $.preproc_elif],
 
+    [$.preproc_else, $.translation_unit],
+    [$.preproc_else, $.compound_statement],
+
+    [$.preproc_else_statement, $.translation_unit],
+    [$.preproc_else_statement, $.compound_statement],
+    [$.preproc_else_statement, $._preproc_item]
   ],
 
   word: $ => $.identifier,
@@ -107,7 +113,8 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment
+      $.preproc_if_assignment,
+      $.preproc_else_statement
     ),
 
     _block_item: $ => choice(
@@ -126,7 +133,8 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment
+      $.preproc_if_assignment,
+      $.preproc_else_statement
     ),
 
     preproc_include: $ => seq(
@@ -168,6 +176,8 @@ module.exports = grammar({
     ...preprocIf('', $ => $._preproc_item),
     ...preprocIf('_as_function_return_type', $ => $.fragmentary_item),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
+    ...preprocIf('_with_else', $ => $.else_clause),
+
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
@@ -247,6 +257,14 @@ module.exports = grammar({
       "=",
       $._statement
     ),
+
+    preproc_else_statement: $ => prec.right(seq(
+      $.if_statement,
+      choice(
+        $.preproc_if_with_else,
+        $.preproc_ifdef_with_else
+      )
+    )),
 
     // Main Grammar
     _preproc_item: $ => choice(

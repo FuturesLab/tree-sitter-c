@@ -1097,6 +1097,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -1277,6 +1281,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
@@ -2736,6 +2744,10 @@
           "named": true
         },
         {
+          "type": "else_clause",
+          "named": true
+        },
+        {
           "type": "field_declaration",
           "named": true
         },
@@ -2757,6 +2769,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
@@ -2852,6 +2868,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -2899,6 +2919,10 @@
           "named": true
         },
         {
+          "type": "else_clause",
+          "named": true
+        },
+        {
           "type": "field_declaration",
           "named": true
         },
@@ -2923,6 +2947,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -2944,6 +2972,29 @@
         },
         {
           "type": "type_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_else_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "preproc_if_with_else",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef_with_else",
           "named": true
         }
       ]
@@ -3155,6 +3206,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -3199,6 +3254,74 @@
         },
         {
           "type": "preproc_ifdef",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_if_with_else",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_else",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "preproc_defined",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "else_clause",
           "named": true
         }
       ]
@@ -3278,6 +3401,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -3299,6 +3426,50 @@
         },
         {
           "type": "type_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_ifdef_with_else",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_elifdef",
+            "named": true
+          },
+          {
+            "type": "preproc_else",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "else_clause",
           "named": true
         }
       ]
@@ -3617,6 +3788,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
