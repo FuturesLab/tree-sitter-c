@@ -2636,12 +2636,34 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "preproc_if_with_else"
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "preproc_if_with_else"
+                },
+                "named": true,
+                "value": "preproc_if"
               },
               {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "preproc_ifdef_with_else"
+                },
+                "named": true,
+                "value": "preproc_ifdef"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
                 "type": "SYMBOL",
-                "name": "preproc_ifdef_with_else"
+                "name": "else_clause"
+              },
+              {
+                "type": "BLANK"
               }
             ]
           }
@@ -2687,10 +2709,6 @@
           {
             "type": "SYMBOL",
             "name": "ms_call_modifier"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "else_clause"
           },
           {
             "type": "SYMBOL",

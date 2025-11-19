@@ -261,9 +261,10 @@ module.exports = grammar({
     preproc_else_statement: $ => prec.right(seq(
       $.if_statement,
       choice(
-        $.preproc_if_with_else,
-        $.preproc_ifdef_with_else
-      )
+        alias($.preproc_if_with_else, $.preproc_if),
+        alias($.preproc_ifdef_with_else, $.preproc_ifdef)
+      ),
+      optional($.else_clause)
     )),
 
     // Main Grammar
@@ -276,7 +277,6 @@ module.exports = grammar({
       seq($._declaration_specifiers, $.identifier),
       $._declaration_specifiers,
       $.ms_call_modifier,
-      $.else_clause,
       $.storage_class_specifier,
     )),
 
