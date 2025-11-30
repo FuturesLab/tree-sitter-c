@@ -14,7 +14,8 @@
   "author": "Max Brunsfeld",
   "license": "MIT",
   "dependencies": {
-    "nan": "^2.17.0"
+    "nan": "^2.17.0",
+    "npx": "^10.2.2"
   },
   "devDependencies": {
     "eslint": "^8.46.0",

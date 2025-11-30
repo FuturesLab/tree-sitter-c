@@ -75,20 +75,21 @@ module.exports = grammar({
     [$.translation_unit, $.function_definition_preproc],
     [$.compound_statement, $.function_definition_preproc],
     [$._preproc_item, $.function_definition_preproc],
-    [$._preproc_item, $.preproc_ifdef_as_function_return_type],
-    [$._preproc_item, $.preproc_if_as_function_return_type],
-    [$._preproc_item, $.preproc_else_as_function_return_type],
-    [$.preproc_ifdef_as_function_return_type, $.preproc_ifdef],
-    [$.preproc_if_as_function_return_type, $.preproc_if],
-    [$.preproc_else_as_function_return_type, $.preproc_else],
-    [$.preproc_elif_as_function_return_type, $.preproc_elif],
+    [$._preproc_item, $.preproc_ifdef_fragmentary_end],
+    [$._preproc_item, $.preproc_if_fragmentary_end],
+    [$._preproc_item, $.preproc_else_fragmentary_end],
+    [$.preproc_ifdef_fragmentary_end, $.preproc_ifdef],
+    [$.preproc_if_fragmentary_end, $.preproc_if],
+    [$.preproc_else_fragmentary_end, $.preproc_else],
+    [$.preproc_elif_fragmentary_end, $.preproc_elif],
 
     [$.preproc_else, $.translation_unit],
     [$.preproc_else, $.compound_statement],
 
     [$.preproc_else_statement, $.translation_unit],
     [$.preproc_else_statement, $.compound_statement],
-    [$.preproc_else_statement, $._preproc_item]
+    [$.preproc_else_statement, $._preproc_item],
+    [$._preproc_item],
   ],
 
   word: $ => $.identifier,
@@ -114,7 +115,8 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
       $.preproc_if_assignment,
-      $.preproc_else_statement
+      $.preproc_else_statement,
+      // $.preproc_if_fragmentary_statement,
     ),
 
     _block_item: $ => choice(
@@ -134,7 +136,8 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
       $.preproc_if_assignment,
-      $.preproc_else_statement
+      $.preproc_else_statement,
+      // $.preproc_if_fragmentary_statement,
     ),
 
     preproc_include: $ => seq(
@@ -174,7 +177,13 @@ module.exports = grammar({
     ),
 
     ...preprocIf('', $ => $._preproc_item),
-    ...preprocIf('_as_function_return_type', $ => $.fragmentary_item),
+    ...preprocIf('_fragmentary_end', $ => seq(repeat($._preproc_item), $.fragmentary_item)),
+    // Match a fragmentary assignment like `int8_t x =` as a single content unit
+    ...preprocIf('_assignment_end', $ => seq(
+      $._assignment_left_expression,
+      '=',
+      token.immediate(/\r?\n/)
+    )),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
     ...preprocIf('_with_else', $ => $.else_clause),
 
@@ -253,8 +262,19 @@ module.exports = grammar({
     },
 
     preproc_if_assignment: $ => seq(
-      choice($.preproc_if, $.preproc_ifdef),
+      choice(
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+      ),
       "=",
+      $._statement
+    ),
+
+    preproc_if_fragmentary_statement: $ => seq(
+      choice(
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+      ),
       $._statement
     ),
 
@@ -290,8 +310,8 @@ module.exports = grammar({
 
     function_definition_preproc: $ => seq(
       choice(
-        alias($.preproc_if_as_function_return_type, $.preproc_if),
-        alias($.preproc_ifdef_as_function_return_type, $.preproc_ifdef)
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
       ),
       optional($._declaration_specifiers),
       field('declarator', $._declarator),

@@ -2736,6 +2736,10 @@
           "named": true
         },
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "declaration",
           "named": true
         },
@@ -2748,6 +2752,10 @@
           "named": true
         },
         {
+          "type": "field_expression",
+          "named": true
+        },
+        {
           "type": "fragmentary_item",
           "named": true
         },
@@ -2756,7 +2764,19 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "linkage_specification",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "pointer_expression",
           "named": true
         },
         {
@@ -2789,6 +2809,10 @@
         },
         {
           "type": "preproc_include",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
           "named": true
         },
         {
@@ -2911,6 +2935,10 @@
           "named": true
         },
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "declaration",
           "named": true
         },
@@ -2923,6 +2951,10 @@
           "named": true
         },
         {
+          "type": "field_expression",
+          "named": true
+        },
+        {
           "type": "fragmentary_item",
           "named": true
         },
@@ -2931,7 +2963,19 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "linkage_specification",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "pointer_expression",
           "named": true
         },
         {
@@ -2964,6 +3008,10 @@
         },
         {
           "type": "preproc_include",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
           "named": true
         },
         {
