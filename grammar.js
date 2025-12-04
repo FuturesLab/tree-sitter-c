@@ -89,6 +89,7 @@ module.exports = grammar({
     [$.preproc_else_statement, $.translation_unit],
     [$.preproc_else_statement, $.compound_statement],
     [$.preproc_else_statement, $._preproc_item],
+
     [$._preproc_item],
   ],
 
@@ -114,9 +115,8 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment,
+      // $.preproc_if_assignment,
       $.preproc_else_statement,
-      // $.preproc_if_fragmentary_statement,
     ),
 
     _block_item: $ => choice(
@@ -135,9 +135,8 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment,
+      // $.preproc_if_assignment,
       $.preproc_else_statement,
-      // $.preproc_if_fragmentary_statement,
     ),
 
     preproc_include: $ => seq(
@@ -176,14 +175,10 @@ module.exports = grammar({
       token.immediate(/\r?\n/),
     ),
 
-    ...preprocIf('', $ => $._preproc_item),
+    ...preprocIf('', $ => $._preproc_item, 1),
     ...preprocIf('_fragmentary_end', $ => seq(repeat($._preproc_item), $.fragmentary_item)),
     // Match a fragmentary assignment like `int8_t x =` as a single content unit
-    ...preprocIf('_assignment_end', $ => seq(
-      $._assignment_left_expression,
-      '=',
-      token.immediate(/\r?\n/)
-    )),
+    ...preprocIf('_assignment_end', $ => seq(repeat($._preproc_item), $._partial_lhs_assignment)),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
     ...preprocIf('_with_else', $ => $.else_clause),
 
@@ -263,10 +258,25 @@ module.exports = grammar({
 
     preproc_if_assignment: $ => seq(
       choice(
+        $._preproc_if_assignment_equals_out,
+        $._preproc_if_assignment_equals_in
+      ),
+    ),
+
+    _preproc_if_assignment_equals_out: $ => prec(1, seq(
+      choice(
         alias($.preproc_if_fragmentary_end, $.preproc_if),
         alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
       ),
-      "=",
+      $._operator_value,
+      $._statement
+    )),
+
+    _preproc_if_assignment_equals_in: $ => seq(
+      choice(
+        alias($.preproc_if_assignment_end, $.preproc_if),
+        alias($.preproc_ifdef_assignment_end, $.preproc_ifdef)
+      ),
       $._statement
     ),
 
@@ -290,7 +300,12 @@ module.exports = grammar({
     // Main Grammar
     _preproc_item: $ => choice(
       $._block_item,
-      $.fragmentary_item,
+    ),
+
+    _partial_lhs_assignment: $ => seq(
+      optional($._type_specifier),
+      $._assignment_left_expression,
+      $._operator_value
     ),
 
     fragmentary_item: $ => prec.left(-10, choice(
@@ -1017,6 +1032,20 @@ module.exports = grammar({
         '|=',
       )),
       field('right', $._expression),
+    )),
+
+    _operator_value: _ => field('operator', choice(
+      '=',
+      '*=',
+      '/=',
+      '%=',
+      '+=',
+      '-=',
+      '<<=',
+      '>>=',
+      '&=',
+      '^=',
+      '|=',
     )),
 
     pointer_expression: $ => prec.left(PREC.CAST, seq(
