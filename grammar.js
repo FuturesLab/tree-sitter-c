@@ -89,6 +89,10 @@ module.exports = grammar({
     [$.preproc_else_statement, $.translation_unit],
     [$.preproc_else_statement, $.compound_statement],
     [$.preproc_else_statement, $._preproc_item],
+
+    [$.preproc_if_declaration, $.attributed_declarator],
+
+    [$.preproc_if_declaration, $.function_definition_preproc],
   ],
 
   word: $ => $.identifier,
@@ -114,6 +118,7 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
       $.preproc_if_assignment,
+      $.preproc_if_declaration,
       $.preproc_else_statement,
     ),
 
@@ -259,6 +264,25 @@ module.exports = grammar({
         $._preproc_if_assignment_equals_in
       ),
       $.expression_statement,
+    ),
+
+    preproc_if_declaration: $ => seq(
+      choice(
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+      ),
+      $.if_declaration_rhs,
+      ';'
+    ),
+
+    if_declaration_rhs: $ => choice(
+      seq(
+        $._declarator,
+        optional(seq(
+          '=',
+          field('value', choice($.initializer_list, $._expression)),
+        ))
+      ),
     ),
 
     _preproc_if_assignment_equals_out: $ => seq(

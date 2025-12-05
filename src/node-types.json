@@ -2092,6 +2092,36 @@
     }
   },
   {
+    "type": "if_declaration_rhs",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          },
+          {
+            "type": "initializer_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_declarator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if_statement",
     "named": true,
     "fields": {
@@ -3414,6 +3444,29 @@
     }
   },
   {
+    "type": "preproc_if_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "if_declaration_rhs",
+          "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "preproc_ifdef",
     "named": true,
     "fields": {
@@ -3884,6 +3937,10 @@
         },
         {
           "type": "preproc_if_assignment",
+          "named": true
+        },
+        {
+          "type": "preproc_if_declaration",
           "named": true
         },
         {
