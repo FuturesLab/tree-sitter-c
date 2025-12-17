@@ -139,6 +139,7 @@ module.exports = grammar({
       $.preproc_function_def,
       $.preproc_call,
       $.preproc_if_assignment,
+      $.preproc_if_declaration,
       $.preproc_else_statement,
     ),
 

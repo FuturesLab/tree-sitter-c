@@ -175,6 +175,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "preproc_if_declaration"
+        },
+        {
+          "type": "SYMBOL",
           "name": "preproc_else_statement"
         }
       ]

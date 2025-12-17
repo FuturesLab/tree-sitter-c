@@ -1113,6 +1113,10 @@
           "named": true
         },
         {
+          "type": "preproc_if_declaration",
+          "named": true
+        },
+        {
           "type": "preproc_ifdef",
           "named": true
         },
@@ -1297,6 +1301,10 @@
         },
         {
           "type": "preproc_if_assignment",
+          "named": true
+        },
+        {
+          "type": "preproc_if_declaration",
           "named": true
         },
         {
@@ -2840,6 +2848,10 @@
           "named": true
         },
         {
+          "type": "preproc_if_declaration",
+          "named": true
+        },
+        {
           "type": "preproc_ifdef",
           "named": true
         },
@@ -2937,6 +2949,10 @@
         },
         {
           "type": "preproc_if_assignment",
+          "named": true
+        },
+        {
+          "type": "preproc_if_declaration",
           "named": true
         },
         {
@@ -3043,6 +3059,10 @@
         },
         {
           "type": "preproc_if_assignment",
+          "named": true
+        },
+        {
+          "type": "preproc_if_declaration",
           "named": true
         },
         {
@@ -3347,6 +3367,10 @@
           "named": true
         },
         {
+          "type": "preproc_if_declaration",
+          "named": true
+        },
+        {
           "type": "preproc_ifdef",
           "named": true
         },
@@ -3583,6 +3607,10 @@
         },
         {
           "type": "preproc_if_assignment",
+          "named": true
+        },
+        {
+          "type": "preproc_if_declaration",
           "named": true
         },
         {
