@@ -93,6 +93,10 @@
         {
           "type": "SYMBOL",
           "name": "preproc_else_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_generic_fragment"
         }
       ]
     },
@@ -3024,6 +3028,62 @@
         }
       ]
     },
+    "fragmentary_item": {
+      "type": "PREC_LEFT",
+      "value": -10,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_declaration_specifiers"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_declaration_specifiers"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "ms_call_modifier"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "storage_class_specifier"
+          }
+        ]
+      }
+    },
+    "preproc_generic_fragment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "fragmentary_item"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "preproc_ifdef"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "preproc_if"
+            }
+          ]
+        }
+      ]
+    },
     "preproc_if_assignment": {
       "type": "SEQ",
       "members": [
@@ -3285,40 +3345,6 @@
           {
             "type": "STRING",
             "value": "="
-          }
-        ]
-      }
-    },
-    "fragmentary_item": {
-      "type": "PREC_LEFT",
-      "value": -10,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_declaration_specifiers"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              }
-            ]
-          },
-          {
-            "type": "SYMBOL",
-            "name": "_declaration_specifiers"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "ms_call_modifier"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "storage_class_specifier"
           }
         ]
       }

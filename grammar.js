@@ -120,6 +120,7 @@ module.exports = grammar({
       $.preproc_if_assignment,
       $.preproc_if_declaration,
       $.preproc_else_statement,
+      $.preproc_generic_fragment
     ),
 
     _block_item: $ => choice(
@@ -259,6 +260,24 @@ module.exports = grammar({
       }));
     },
 
+    //fragmentary items
+
+    fragmentary_item: $ => prec.left(-10, choice(
+      seq($._declaration_specifiers, $.identifier),
+      $._declaration_specifiers,
+      $.ms_call_modifier,
+      $.storage_class_specifier,
+    )),
+
+
+    preproc_generic_fragment: $ => seq(
+      $.fragmentary_item,
+      choice(
+        $.preproc_ifdef,
+        $.preproc_if,
+      )
+    ),
+
     preproc_if_assignment: $ => seq(
       choice(
         $._preproc_if_assignment_equals_out,
@@ -324,13 +343,6 @@ module.exports = grammar({
       $._declaration_specifiers,
       $._declarator,
       '=',
-    )),
-
-    fragmentary_item: $ => prec.left(-10, choice(
-      seq($._declaration_specifiers, $.identifier),
-      $._declaration_specifiers,
-      $.ms_call_modifier,
-      $.storage_class_specifier,
     )),
 
     function_definition: $ => seq(

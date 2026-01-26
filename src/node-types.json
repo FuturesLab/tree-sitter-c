@@ -3224,6 +3224,29 @@
     }
   },
   {
+    "type": "preproc_generic_fragment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "fragmentary_item",
+          "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "preproc_if",
     "named": true,
     "fields": {
@@ -3957,6 +3980,10 @@
         },
         {
           "type": "preproc_function_def",
+          "named": true
+        },
+        {
+          "type": "preproc_generic_fragment",
           "named": true
         },
         {
