@@ -185,6 +185,7 @@ module.exports = grammar({
     ...preprocIf('_assignment_end', $ => $._partial_lhs_declaration),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
     ...preprocIf('_with_else', $ => $.else_clause),
+    ...preprocIf('_in_case_statement', $ => $._case_statement_item),
 
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
@@ -932,12 +933,20 @@ module.exports = grammar({
       ),
       ':',
       repeat(choice(
-        $._non_case_statement,
-        $.declaration,
-        $.type_definition,
+        alias($.preproc_ifdef_in_case_statement, $.preproc_ifdef),
+        alias($.preproc_if_in_case_statement, $.preproc_if),
+        $._case_statement_item
       )),
     )),
 
+    _case_statement_item: $ => choice(
+      $._non_case_statement,
+      $.declaration,
+      $.type_definition,
+    ),
+
+
+ 
     while_statement: $ => seq(
       'while',
       field('condition', $.parenthesized_expression),
