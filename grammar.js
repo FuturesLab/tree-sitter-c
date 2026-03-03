@@ -653,6 +653,7 @@ module.exports = grammar({
       '__forceinline',
       'thread_local',
       '__thread',
+      '_Complex',
     ),
 
     type_qualifier: _ => choice(

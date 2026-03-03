@@ -4510,6 +4510,10 @@
     "named": false
   },
   {
+    "type": "_Complex",
+    "named": false
+  },
+  {
     "type": "_Generic",
     "named": false
   },

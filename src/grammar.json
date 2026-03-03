@@ -5375,6 +5375,10 @@
         {
           "type": "STRING",
           "value": "__thread"
+        },
+        {
+          "type": "STRING",
+          "value": "_Complex"
         }
       ]
     },
