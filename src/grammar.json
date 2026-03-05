@@ -6992,31 +6992,8 @@
           {
             "type": "REPEAT",
             "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "preproc_ifdef_in_case_statement"
-                  },
-                  "named": true,
-                  "value": "preproc_ifdef"
-                },
-                {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "preproc_if_in_case_statement"
-                  },
-                  "named": true,
-                  "value": "preproc_if"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_case_statement_item"
-                }
-              ]
+              "type": "SYMBOL",
+              "name": "_case_statement_item"
             }
           }
         ]

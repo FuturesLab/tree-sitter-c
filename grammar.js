@@ -933,11 +933,9 @@ module.exports = grammar({
         'default',
       ),
       ':',
-      repeat(choice(
-        alias($.preproc_ifdef_in_case_statement, $.preproc_ifdef),
-        alias($.preproc_if_in_case_statement, $.preproc_if),
+      repeat(
         $._case_statement_item
-      )),
+      ),
     )),
 
     _case_statement_item: $ => choice(

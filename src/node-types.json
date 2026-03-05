@@ -941,14 +941,6 @@
           "named": true
         },
         {
-          "type": "preproc_if",
-          "named": true
-        },
-        {
-          "type": "preproc_ifdef",
-          "named": true
-        },
-        {
           "type": "return_statement",
           "named": true
         },
