@@ -20,15 +20,6 @@
           "type": "ALIAS",
           "content": {
             "type": "SYMBOL",
-            "name": "function_definition_preproc"
-          },
-          "named": true,
-          "value": "function_definition"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
             "name": "_old_style_function_definition"
           },
           "named": true,
@@ -81,22 +72,6 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_if_assignment"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_if_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_else_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_generic_fragment"
         }
       ]
     },
@@ -106,15 +81,6 @@
         {
           "type": "SYMBOL",
           "name": "function_definition"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "function_definition_preproc"
-          },
-          "named": true,
-          "value": "function_definition"
         },
         {
           "type": "ALIAS",
@@ -172,18 +138,6 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_if_assignment"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_if_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "preproc_else_statement"
         }
       ]
     },
@@ -3707,62 +3661,6 @@
         {
           "type": "SYMBOL",
           "name": "_declaration_specifiers"
-        },
-        {
-          "type": "FIELD",
-          "name": "declarator",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_declarator"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "body",
-          "content": {
-            "type": "SYMBOL",
-            "name": "compound_statement"
-          }
-        }
-      ]
-    },
-    "function_definition_preproc": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "preproc_if_fragmentary_end"
-              },
-              "named": true,
-              "value": "preproc_if"
-            },
-            {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "preproc_ifdef_fragmentary_end"
-              },
-              "named": true,
-              "value": "preproc_ifdef"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_declaration_specifiers"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
         },
         {
           "type": "FIELD",
@@ -10376,74 +10274,6 @@
     [
       "storage_class_specifier",
       "linkage_specification"
-    ],
-    [
-      "translation_unit",
-      "function_definition_preproc"
-    ],
-    [
-      "compound_statement",
-      "function_definition_preproc"
-    ],
-    [
-      "_preproc_item",
-      "function_definition_preproc"
-    ],
-    [
-      "_preproc_item",
-      "preproc_ifdef_fragmentary_end"
-    ],
-    [
-      "_preproc_item",
-      "preproc_if_fragmentary_end"
-    ],
-    [
-      "_preproc_item",
-      "preproc_else_fragmentary_end"
-    ],
-    [
-      "preproc_ifdef_fragmentary_end",
-      "preproc_ifdef"
-    ],
-    [
-      "preproc_if_fragmentary_end",
-      "preproc_if"
-    ],
-    [
-      "preproc_else_fragmentary_end",
-      "preproc_else"
-    ],
-    [
-      "preproc_elif_fragmentary_end",
-      "preproc_elif"
-    ],
-    [
-      "preproc_else",
-      "translation_unit"
-    ],
-    [
-      "preproc_else",
-      "compound_statement"
-    ],
-    [
-      "preproc_else_statement",
-      "translation_unit"
-    ],
-    [
-      "preproc_else_statement",
-      "compound_statement"
-    ],
-    [
-      "preproc_else_statement",
-      "_preproc_item"
-    ],
-    [
-      "preproc_if_declaration",
-      "attributed_declarator"
-    ],
-    [
-      "preproc_if_declaration",
-      "function_definition_preproc"
     ]
   ],
   "precedences": [],

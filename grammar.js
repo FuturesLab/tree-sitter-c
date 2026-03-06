@@ -72,27 +72,27 @@ module.exports = grammar({
     [$._type_specifier, $.concatenated_string],
     [$.storage_class_specifier, $.linkage_specification],
 
-    [$.translation_unit, $.function_definition_preproc],
-    [$.compound_statement, $.function_definition_preproc],
-    [$._preproc_item, $.function_definition_preproc],
-    [$._preproc_item, $.preproc_ifdef_fragmentary_end],
-    [$._preproc_item, $.preproc_if_fragmentary_end],
-    [$._preproc_item, $.preproc_else_fragmentary_end],
-    [$.preproc_ifdef_fragmentary_end, $.preproc_ifdef],
-    [$.preproc_if_fragmentary_end, $.preproc_if],
-    [$.preproc_else_fragmentary_end, $.preproc_else],
-    [$.preproc_elif_fragmentary_end, $.preproc_elif],
+    // [$.translation_unit, $.function_definition_preproc],
+    // [$.compound_statement, $.function_definition_preproc],
+    // [$._preproc_item, $.function_definition_preproc],
+    // [$._preproc_item, $.preproc_ifdef_fragmentary_end],
+    // [$._preproc_item, $.preproc_if_fragmentary_end],
+    // [$._preproc_item, $.preproc_else_fragmentary_end],
+    // [$.preproc_ifdef_fragmentary_end, $.preproc_ifdef],
+    // [$.preproc_if_fragmentary_end, $.preproc_if],
+    // [$.preproc_else_fragmentary_end, $.preproc_else],
+    // [$.preproc_elif_fragmentary_end, $.preproc_elif],
 
-    [$.preproc_else, $.translation_unit],
-    [$.preproc_else, $.compound_statement],
+    // [$.preproc_else, $.translation_unit],
+    // [$.preproc_else, $.compound_statement],
 
-    [$.preproc_else_statement, $.translation_unit],
-    [$.preproc_else_statement, $.compound_statement],
-    [$.preproc_else_statement, $._preproc_item],
+    // [$.preproc_else_statement, $.translation_unit],
+    // [$.preproc_else_statement, $.compound_statement],
+    // [$.preproc_else_statement, $._preproc_item],
 
-    [$.preproc_if_declaration, $.attributed_declarator],
+    // [$.preproc_if_declaration, $.attributed_declarator],
 
-    [$.preproc_if_declaration, $.function_definition_preproc],
+    // [$.preproc_if_declaration, $.function_definition_preproc],
   ],
 
   word: $ => $.identifier,
@@ -103,7 +103,6 @@ module.exports = grammar({
     // Top level items are block items with the exception of the expression statement
     _top_level_item: $ => choice(
       $.function_definition,
-      alias($.function_definition_preproc, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -117,15 +116,16 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment,
-      $.preproc_if_declaration,
-      $.preproc_else_statement,
-      $.preproc_generic_fragment
+      // $.preproc_if_assignment,
+      // $.preproc_if_declaration,
+      // $.preproc_else_statement,
+      // $.preproc_generic_fragment
+      // alias($.function_definition_preproc, $.function_definition),
+
     ),
 
     _block_item: $ => choice(
       $.function_definition,
-      alias($.function_definition_preproc, $.function_definition),
       alias($._old_style_function_definition, $.function_definition),
       $.linkage_specification,
       $.declaration,
@@ -139,9 +139,10 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
-      $.preproc_if_assignment,
-      $.preproc_if_declaration,
-      $.preproc_else_statement,
+      // alias($.function_definition_preproc, $.function_definition),
+      // $.preproc_if_assignment,
+      // $.preproc_if_declaration,
+      // $.preproc_else_statement,
     ),
 
     preproc_include: $ => seq(
@@ -354,15 +355,15 @@ module.exports = grammar({
     ),
 
 
-    function_definition_preproc: $ => seq(
-      choice(
-        alias($.preproc_if_fragmentary_end, $.preproc_if),
-        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
-      ),
-      optional($._declaration_specifiers),
-      field('declarator', $._declarator),
-      field('body', $.compound_statement)
-    ),
+    // function_definition_preproc: $ => seq(
+    //   choice(
+    //     alias($.preproc_if_fragmentary_end, $.preproc_if),
+    //     alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+    //   ),
+    //   optional($._declaration_specifiers),
+    //   field('declarator', $._declarator),
+    //   field('body', $.compound_statement)
+    // ),
 
 
     _old_style_function_definition: $ => seq(
