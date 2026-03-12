@@ -83,12 +83,12 @@ module.exports = grammar({
     // [$.preproc_else_fragmentary_end, $.preproc_else],
     // [$.preproc_elif_fragmentary_end, $.preproc_elif],
 
-    // [$.preproc_else, $.translation_unit],
-    // [$.preproc_else, $.compound_statement],
+    [$.preproc_else, $.translation_unit],
+    [$.preproc_else, $.compound_statement],
 
-    // [$.preproc_else_statement, $.translation_unit],
-    // [$.preproc_else_statement, $.compound_statement],
-    // [$.preproc_else_statement, $._preproc_item],
+    [$.preproc_else_statement, $.translation_unit],
+    [$.preproc_else_statement, $.compound_statement],
+    [$.preproc_else_statement, $._preproc_item],
 
     // [$.preproc_if_declaration, $.attributed_declarator],
 
@@ -118,7 +118,7 @@ module.exports = grammar({
       $.preproc_call,
       // $.preproc_if_assignment,
       // $.preproc_if_declaration,
-      // $.preproc_else_statement,
+      $.preproc_else_statement,
       // $.preproc_generic_fragment
       // alias($.function_definition_preproc, $.function_definition),
 
@@ -142,7 +142,7 @@ module.exports = grammar({
       // alias($.function_definition_preproc, $.function_definition),
       // $.preproc_if_assignment,
       // $.preproc_if_declaration,
-      // $.preproc_else_statement,
+      $.preproc_else_statement,
     ),
 
     preproc_include: $ => seq(
@@ -946,7 +946,7 @@ module.exports = grammar({
     ),
 
 
- 
+
     while_statement: $ => seq(
       'while',
       field('condition', $.parenthesized_expression),

@@ -1097,6 +1097,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -1273,6 +1277,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
@@ -2800,6 +2808,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -2889,6 +2901,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
@@ -2990,6 +3006,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -3015,6 +3035,33 @@
         },
         {
           "type": "type_qualifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_else_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "else_clause",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
           "named": true
         }
       ]
@@ -3256,6 +3303,10 @@
           "named": true
         },
         {
+          "type": "preproc_else_statement",
+          "named": true
+        },
+        {
           "type": "preproc_function_def",
           "named": true
         },
@@ -3387,6 +3438,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {
@@ -3733,6 +3788,10 @@
         },
         {
           "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_else_statement",
           "named": true
         },
         {

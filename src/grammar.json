@@ -72,6 +72,10 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_else_statement"
         }
       ]
     },
@@ -138,6 +142,10 @@
         {
           "type": "SYMBOL",
           "name": "preproc_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_else_statement"
         }
       ]
     },
@@ -10274,6 +10282,26 @@
     [
       "storage_class_specifier",
       "linkage_specification"
+    ],
+    [
+      "preproc_else",
+      "translation_unit"
+    ],
+    [
+      "preproc_else",
+      "compound_statement"
+    ],
+    [
+      "preproc_else_statement",
+      "translation_unit"
+    ],
+    [
+      "preproc_else_statement",
+      "compound_statement"
+    ],
+    [
+      "preproc_else_statement",
+      "_preproc_item"
     ]
   ],
   "precedences": [],
