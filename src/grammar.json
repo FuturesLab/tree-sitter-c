@@ -3846,8 +3846,11 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "STRING",
-              "value": "__extension__"
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "type_qualifier"
+              }
             },
             {
               "type": "BLANK"
@@ -10282,6 +10285,10 @@
     [
       "storage_class_specifier",
       "linkage_specification"
+    ],
+    [
+      "type_definition",
+      "_declaration_modifiers"
     ],
     [
       "preproc_else",

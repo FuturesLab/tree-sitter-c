@@ -72,6 +72,8 @@ module.exports = grammar({
     [$._type_specifier, $.concatenated_string],
     [$.storage_class_specifier, $.linkage_specification],
 
+    [$.type_definition, $._declaration_modifiers],
+
     // [$.translation_unit, $.function_definition_preproc],
     // [$.compound_statement, $.function_definition_preproc],
     // [$._preproc_item, $.function_definition_preproc],
@@ -385,7 +387,8 @@ module.exports = grammar({
     ))),
 
     type_definition: $ => seq(
-      optional('__extension__'),
+      // optional('__extension__'),
+      optional(repeat($.type_qualifier)),
       'typedef',
       $._type_definition_type,
       $._type_definition_declarators,

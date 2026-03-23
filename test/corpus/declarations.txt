@@ -449,10 +449,12 @@ __extension__ typedef struct {
           arguments: (argument_list
             (identifier))))))
   (type_definition
+    (type_qualifier)
     type: (sized_type_specifier
       type: (primitive_type))
     declarator: (type_identifier))
   (type_definition
+    (type_qualifier)
     type: (struct_specifier
       body: (field_declaration_list
         (field_declaration
