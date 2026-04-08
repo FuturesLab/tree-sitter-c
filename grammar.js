@@ -679,7 +679,18 @@ module.exports = grammar({
       $.macro_type_specifier,
       $.sized_type_specifier,
       $.primitive_type,
+      $.typeof_specifier,
       $._type_identifier,
+    ),
+
+    typeof_specifier: $ => seq(
+      choice('typeof', '__typeof__', '__typeof'),
+      '(',
+      choice(
+        $._expression,
+        $.type_descriptor // Allows 'typeof(int *)'
+      ),
+      ')'
     ),
 
     sized_type_specifier: $ => seq(
@@ -702,17 +713,17 @@ module.exports = grammar({
       'float',
       'double',
       'void',
-      'size_t',
-      'ssize_t',
-      'ptrdiff_t',
-      'intptr_t',
-      'uintptr_t',
-      'charptr_t',
-      'nullptr_t',
-      'max_align_t',
-      ...[8, 16, 32, 64].map(n => `int${n}_t`),
-      ...[8, 16, 32, 64].map(n => `uint${n}_t`),
-      ...[8, 16, 32, 64].map(n => `char${n}_t`),
+      // 'size_t',
+      // 'ssize_t',
+      // 'ptrdiff_t',
+      // 'intptr_t',
+      // 'uintptr_t',
+      // 'charptr_t',
+      // 'nullptr_t',
+      // 'max_align_t',
+      // ...[8, 16, 32, 64].map(n => `int${n}_t`),
+      // ...[8, 16, 32, 64].map(n => `uint${n}_t`),
+      // ...[8, 16, 32, 64].map(n => `char${n}_t`),
     )),
 
     enum_specifier: $ => seq(
@@ -1033,6 +1044,13 @@ module.exports = grammar({
       $.char_literal,
       $.parenthesized_expression,
       $.gnu_asm_expression,
+      $.statement_expression
+    ),
+
+    statement_expression: $ => seq(
+      '(',
+      field('body', $.compound_statement),
+      ')',
     ),
 
     comma_expression: $ => seq(

@@ -5361,7 +5361,54 @@
         },
         {
           "type": "SYMBOL",
+          "name": "typeof_specifier"
+        },
+        {
+          "type": "SYMBOL",
           "name": "_type_identifier"
+        }
+      ]
+    },
+    "typeof_specifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "typeof"
+            },
+            {
+              "type": "STRING",
+              "value": "__typeof__"
+            },
+            {
+              "type": "STRING",
+              "value": "__typeof"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "type_descriptor"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
         }
       ]
     },
@@ -5451,86 +5498,6 @@
           {
             "type": "STRING",
             "value": "void"
-          },
-          {
-            "type": "STRING",
-            "value": "size_t"
-          },
-          {
-            "type": "STRING",
-            "value": "ssize_t"
-          },
-          {
-            "type": "STRING",
-            "value": "ptrdiff_t"
-          },
-          {
-            "type": "STRING",
-            "value": "intptr_t"
-          },
-          {
-            "type": "STRING",
-            "value": "uintptr_t"
-          },
-          {
-            "type": "STRING",
-            "value": "charptr_t"
-          },
-          {
-            "type": "STRING",
-            "value": "nullptr_t"
-          },
-          {
-            "type": "STRING",
-            "value": "max_align_t"
-          },
-          {
-            "type": "STRING",
-            "value": "int8_t"
-          },
-          {
-            "type": "STRING",
-            "value": "int16_t"
-          },
-          {
-            "type": "STRING",
-            "value": "int32_t"
-          },
-          {
-            "type": "STRING",
-            "value": "int64_t"
-          },
-          {
-            "type": "STRING",
-            "value": "uint8_t"
-          },
-          {
-            "type": "STRING",
-            "value": "uint16_t"
-          },
-          {
-            "type": "STRING",
-            "value": "uint32_t"
-          },
-          {
-            "type": "STRING",
-            "value": "uint64_t"
-          },
-          {
-            "type": "STRING",
-            "value": "char8_t"
-          },
-          {
-            "type": "STRING",
-            "value": "char16_t"
-          },
-          {
-            "type": "STRING",
-            "value": "char32_t"
-          },
-          {
-            "type": "STRING",
-            "value": "char64_t"
           }
         ]
       }
@@ -7310,6 +7277,31 @@
         {
           "type": "SYMBOL",
           "name": "gnu_asm_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "statement_expression"
+        }
+      ]
+    },
+    "statement_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "compound_statement"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
         }
       ]
     },

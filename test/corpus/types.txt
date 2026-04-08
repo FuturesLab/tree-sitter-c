@@ -1,6 +1,6 @@
-========================================
+================================================================================
 Primitive types
-========================================
+================================================================================
 
 int a;
 uint8_t a;
@@ -21,28 +21,58 @@ char32_t a;
 size_t a;
 ssize_t a;
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier))
-  (declaration (primitive_type) (identifier)))
+  (declaration
+    (primitive_type)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier))
+  (declaration
+    (type_identifier)
+    (identifier)))
 
-========================================
+================================================================================
 Type modifiers
-========================================
+================================================================================
 
 void f(unsigned);
 void f(unsigned int);
@@ -50,31 +80,45 @@ void f(signed long int);
 void f(unsigned v1);
 void f(unsigned long v2);
 
----
+--------------------------------------------------------------------------------
 
 (translation_unit
   (declaration
     (primitive_type)
     (function_declarator
       (identifier)
-      (parameter_list (parameter_declaration (sized_type_specifier)))))
+      (parameter_list
+        (parameter_declaration
+          (sized_type_specifier)))))
   (declaration
     (primitive_type)
     (function_declarator
       (identifier)
-      (parameter_list (parameter_declaration (sized_type_specifier (primitive_type))))))
+      (parameter_list
+        (parameter_declaration
+          (sized_type_specifier
+            (primitive_type))))))
   (declaration
     (primitive_type)
     (function_declarator
       (identifier)
-      (parameter_list (parameter_declaration (sized_type_specifier (primitive_type))))))
+      (parameter_list
+        (parameter_declaration
+          (sized_type_specifier
+            (primitive_type))))))
   (declaration
     (primitive_type)
     (function_declarator
       (identifier)
-      (parameter_list (parameter_declaration (sized_type_specifier) (identifier)))))
+      (parameter_list
+        (parameter_declaration
+          (sized_type_specifier)
+          (identifier)))))
   (declaration
     (primitive_type)
     (function_declarator
       (identifier)
-      (parameter_list (parameter_declaration (sized_type_specifier) (identifier))))))
+      (parameter_list
+        (parameter_declaration
+          (sized_type_specifier)
+          (identifier))))))

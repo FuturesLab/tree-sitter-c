@@ -214,7 +214,7 @@ asm volatile (
             (string_content))
           (cast_expression
             (type_descriptor
-              (primitive_type))
+              (type_identifier))
             (identifier))))
       (gnu_asm_clobber_list
         (string_literal
@@ -749,7 +749,7 @@ typedef struct {
                     (type_descriptor
                       (sized_type_specifier
                         (primitive_type)))))))))))
-    (primitive_type)))
+    (type_identifier)))
 
 ================================================================================
 Offsetof expressions
