@@ -357,17 +357,6 @@ module.exports = grammar({
     ),
 
 
-    // function_definition_preproc: $ => seq(
-    //   choice(
-    //     alias($.preproc_if_fragmentary_end, $.preproc_if),
-    //     alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
-    //   ),
-    //   optional($._declaration_specifiers),
-    //   field('declarator', $._declarator),
-    //   field('body', $.compound_statement)
-    // ),
-
-
     _old_style_function_definition: $ => seq(
       optional($.ms_call_modifier),
       $._declaration_specifiers,
