@@ -68,9 +68,33 @@ module.exports = grammar({
     [$._type_specifier, $._old_style_parameter_list],
     [$.parameter_list, $._old_style_parameter_list],
     [$.preproc_function_parameters],
-    [$.preproc_item, $.fragmentary_item],
-    [$.preproc_ifdef, $.preproc_ifdef_with_function_return_type],
-    [$.preproc_if, $.preproc_if_with_function_return_type],
+    [$._preproc_item, $.fragmentary_item],
+    [$._type_specifier, $.concatenated_string],
+    [$.storage_class_specifier, $.linkage_specification],
+
+    [$.type_definition, $._declaration_modifiers],
+
+    // [$.translation_unit, $.function_definition_preproc],
+    // [$.compound_statement, $.function_definition_preproc],
+    // [$._preproc_item, $.function_definition_preproc],
+    // [$._preproc_item, $.preproc_ifdef_fragmentary_end],
+    // [$._preproc_item, $.preproc_if_fragmentary_end],
+    // [$._preproc_item, $.preproc_else_fragmentary_end],
+    // [$.preproc_ifdef_fragmentary_end, $.preproc_ifdef],
+    // [$.preproc_if_fragmentary_end, $.preproc_if],
+    // [$.preproc_else_fragmentary_end, $.preproc_else],
+    // [$.preproc_elif_fragmentary_end, $.preproc_elif],
+
+    [$.preproc_else, $.translation_unit],
+    [$.preproc_else, $.compound_statement],
+
+    [$.preproc_else_statement, $.translation_unit],
+    [$.preproc_else_statement, $.compound_statement],
+    [$.preproc_else_statement, $._preproc_item],
+
+    // [$.preproc_if_declaration, $.attributed_declarator],
+
+    // [$.preproc_if_declaration, $.function_definition_preproc],
   ],
 
   word: $ => $.identifier,
@@ -94,6 +118,12 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
+      // $.preproc_if_assignment,
+      // $.preproc_if_declaration,
+      $.preproc_else_statement,
+      // $.preproc_generic_fragment
+      // alias($.function_definition_preproc, $.function_definition),
+
     ),
 
     _block_item: $ => choice(
@@ -111,9 +141,11 @@ module.exports = grammar({
       $.preproc_def,
       $.preproc_function_def,
       $.preproc_call,
+      // alias($.function_definition_preproc, $.function_definition),
+      // $.preproc_if_assignment,
+      // $.preproc_if_declaration,
+      $.preproc_else_statement,
     ),
-
-    // Preprocesser
 
     preproc_include: $ => seq(
       preprocessor('include'),
@@ -151,9 +183,12 @@ module.exports = grammar({
       token.immediate(/\r?\n/),
     ),
 
-    ...preprocIf('', $ => $.preproc_item),
+    ...preprocIf('', $ => $._preproc_item, 1),
+    ...preprocIf('_fragmentary_end', $ => seq(repeat($._preproc_item), $.fragmentary_item)),
+    ...preprocIf('_assignment_end', $ => $._partial_lhs_declaration),
     ...preprocIf('_in_field_declaration_list', $ => $._field_declaration_list_item),
-    ...preprocIf('_with_function_return_type', $ => $.primitive_type),
+    ...preprocIf('_with_else', $ => $.else_clause),
+    ...preprocIf('_in_case_statement', $ => $._case_statement_item),
 
 
     preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
@@ -229,29 +264,98 @@ module.exports = grammar({
       }));
     },
 
-    // Main Grammar
-    preproc_item: $ =>
-      choice(
-        $._block_item,
-        $.fragmentary_item
-      ),
+    //fragmentary items
 
-    fragmentary_item: $ => prec.right(-10, choice(
-      $.primitive_type,
-      $.struct_specifier,
-      $.union_specifier,
-      $.enum_specifier,
-      $.sized_type_specifier
+    fragmentary_item: $ => prec.left(-10, choice(
+      seq($._declaration_specifiers, $.identifier),
+      $._declaration_specifiers,
+      $.ms_call_modifier,
+      $.storage_class_specifier,
+    )),
+
+
+    preproc_generic_fragment: $ => seq(
+      $.fragmentary_item,
+      choice(
+        $.preproc_ifdef,
+        $.preproc_if,
+      )
+    ),
+
+    preproc_if_assignment: $ => seq(
+      choice(
+        $._preproc_if_assignment_equals_out,
+        $._preproc_if_assignment_equals_in
+      ),
+      $.expression_statement,
+    ),
+
+    preproc_if_declaration: $ => seq(
+      choice(
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+      ),
+      $.if_declaration_rhs,
+      ';'
+    ),
+
+    if_declaration_rhs: $ => choice(
+      seq(
+        $._declarator,
+        optional(seq(
+          '=',
+          field('value', choice($.initializer_list, $._expression)),
+        ))
+      ),
+    ),
+
+    _preproc_if_assignment_equals_out: $ => seq(
+      choice(
+        alias($.preproc_if_fragmentary_end, $.preproc_if),
+        alias($.preproc_ifdef_fragmentary_end, $.preproc_ifdef)
+      ),
+      $._operator_value,
+    ),
+
+    _preproc_if_assignment_equals_in: $ => seq(
+      choice(
+        alias($.preproc_if_assignment_end, $.preproc_if),
+        alias($.preproc_ifdef_assignment_end, $.preproc_ifdef)
+      )
+    ),
+
+    preproc_else_statement: $ => prec.right(seq(
+      $.if_statement,
+      choice(
+        alias($.preproc_if_with_else, $.preproc_if),
+        alias($.preproc_ifdef_with_else, $.preproc_ifdef)
+      ),
+      optional($.else_clause)
+    )),
+
+    // Main Grammar
+    _preproc_item: $ => choice(
+      $._block_item,
+    ),
+
+    _partial_lhs_assignment: $ => prec.left(-10, seq(
+      field('left', $._assignment_left_expression),
+      $._operator_value,
+    )),
+
+    _partial_lhs_declaration: $ => prec.left(-10, seq(
+      $._declaration_specifiers,
+      $._declarator,
+      '=',
     )),
 
     function_definition: $ => seq(
       optional($.ms_call_modifier),
-      choice(
-        $._declaration_specifiers,
-      ),
+      $._declaration_specifiers,
       field('declarator', $._declarator),
       field('body', $.compound_statement)
     ),
+
 
     _old_style_function_definition: $ => seq(
       optional($.ms_call_modifier),
@@ -272,7 +376,8 @@ module.exports = grammar({
     ))),
 
     type_definition: $ => seq(
-      optional('__extension__'),
+      // optional('__extension__'),
+      optional(repeat($.type_qualifier)),
       'typedef',
       $._type_definition_type,
       $._type_definition_declarators,
@@ -541,6 +646,7 @@ module.exports = grammar({
       '__forceinline',
       'thread_local',
       '__thread',
+      '_Complex',
     ),
 
     type_qualifier: _ => choice(
@@ -562,7 +668,18 @@ module.exports = grammar({
       $.macro_type_specifier,
       $.sized_type_specifier,
       $.primitive_type,
+      $.typeof_specifier,
       $._type_identifier,
+    ),
+
+    typeof_specifier: $ => seq(
+      choice('typeof', '__typeof__', '__typeof'),
+      '(',
+      choice(
+        $._expression,
+        $.type_descriptor // Allows 'typeof(int *)'
+      ),
+      ')'
     ),
 
     sized_type_specifier: $ => seq(
@@ -585,17 +702,17 @@ module.exports = grammar({
       'float',
       'double',
       'void',
-      'size_t',
-      'ssize_t',
-      'ptrdiff_t',
-      'intptr_t',
-      'uintptr_t',
-      'charptr_t',
-      'nullptr_t',
-      'max_align_t',
-      ...[8, 16, 32, 64].map(n => `int${n}_t`),
-      ...[8, 16, 32, 64].map(n => `uint${n}_t`),
-      ...[8, 16, 32, 64].map(n => `char${n}_t`),
+      // 'size_t',
+      // 'ssize_t',
+      // 'ptrdiff_t',
+      // 'intptr_t',
+      // 'uintptr_t',
+      // 'charptr_t',
+      // 'nullptr_t',
+      // 'max_align_t',
+      // ...[8, 16, 32, 64].map(n => `int${n}_t`),
+      // ...[8, 16, 32, 64].map(n => `uint${n}_t`),
+      // ...[8, 16, 32, 64].map(n => `char${n}_t`),
     )),
 
     enum_specifier: $ => seq(
@@ -820,12 +937,18 @@ module.exports = grammar({
         'default',
       ),
       ':',
-      repeat(choice(
-        $._non_case_statement,
-        $.declaration,
-        $.type_definition,
-      )),
+      repeat(
+        $._case_statement_item
+      ),
     )),
+
+    _case_statement_item: $ => choice(
+      $._non_case_statement,
+      $.declaration,
+      $.type_definition,
+    ),
+
+
 
     while_statement: $ => seq(
       'while',
@@ -910,6 +1033,13 @@ module.exports = grammar({
       $.char_literal,
       $.parenthesized_expression,
       $.gnu_asm_expression,
+      $.statement_expression
+    ),
+
+    statement_expression: $ => seq(
+      '(',
+      field('body', $.compound_statement),
+      ')',
     ),
 
     comma_expression: $ => seq(
@@ -951,6 +1081,20 @@ module.exports = grammar({
         '|=',
       )),
       field('right', $._expression),
+    )),
+
+    _operator_value: _ => field('operator', choice(
+      '=',
+      '*=',
+      '/=',
+      '%=',
+      '+=',
+      '-=',
+      '<<=',
+      '>>=',
+      '&=',
+      '^=',
+      '|=',
     )),
 
     pointer_expression: $ => prec.left(PREC.CAST, seq(
@@ -1300,14 +1444,14 @@ module.exports.PREC = PREC;
  *
  * @return {RuleBuilders<string, string>}
  */
-function preprocIf(suffix, content) {
-  /**
-    *
-    * @param {GrammarSymbols<string>} $
-    *
-    * @return {ChoiceRule}
-    *
-    */
+
+function preprocIf(suffix, content, precedence = 0) {
+
+
+  function wrap($) {
+    return precedence ? prec(precedence, $) : $;
+  }
+
   function elseBlock($) {
     return choice(
       suffix ? alias($['preproc_else' + suffix], $.preproc_else) : $.preproc_else,
@@ -1316,44 +1460,45 @@ function preprocIf(suffix, content) {
   }
 
   return {
-    ['preproc_if' + suffix]: $ => seq(
+    ['preproc_if' + suffix]: $ => wrap(seq(
       preprocessor('if'),
       field('condition', $._preproc_expression),
       '\n',
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
       preprocessor('endif'),
-    ),
+    )),
 
-    ['preproc_ifdef' + suffix]: $ => seq(
+    ['preproc_ifdef' + suffix]: $ => wrap(seq(
       choice(preprocessor('ifdef'), preprocessor('ifndef')),
       field('name', $.identifier),
       repeat(content($)),
       field('alternative', optional(choice(elseBlock($), $.preproc_elifdef))),
       preprocessor('endif'),
-    ),
+    )),
 
-    ['preproc_else' + suffix]: $ => seq(
+    ['preproc_else' + suffix]: $ => wrap(seq(
       preprocessor('else'),
       repeat(content($)),
-    ),
+    )),
 
-    ['preproc_elif' + suffix]: $ => seq(
+    ['preproc_elif' + suffix]: $ => wrap(seq(
       preprocessor('elif'),
       field('condition', $._preproc_expression),
       '\n',
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
-    ),
+    )),
 
-    ['preproc_elifdef' + suffix]: $ => seq(
+    ['preproc_elifdef' + suffix]: $ => wrap(seq(
       choice(preprocessor('elifdef'), preprocessor('elifndef')),
       field('name', $.identifier),
       repeat(content($)),
       field('alternative', optional(elseBlock($))),
-    ),
+    )),
   };
 }
+
 
 /**
   * Creates a preprocessor regex rule
