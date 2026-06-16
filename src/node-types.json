@@ -2217,6 +2217,10 @@
           {
             "type": "subscript_designator",
             "named": true
+          },
+          {
+            "type": "subscript_range_designator",
+            "named": true
           }
         ]
       },
@@ -3701,6 +3705,32 @@
         ]
       },
       "index": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "subscript_range_designator",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
+      "start": {
         "multiple": false,
         "required": true,
         "types": [

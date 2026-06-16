@@ -9421,6 +9421,10 @@
                 },
                 {
                   "type": "SYMBOL",
+                  "name": "subscript_range_designator"
+                },
+                {
+                  "type": "SYMBOL",
                   "name": "field_designator"
                 }
               ]
@@ -9447,6 +9451,39 @@
               }
             ]
           }
+        }
+      ]
+    },
+    "subscript_range_designator": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "FIELD",
+          "name": "start",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "..."
+        },
+        {
+          "type": "FIELD",
+          "name": "end",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "]"
         }
       ]
     },
